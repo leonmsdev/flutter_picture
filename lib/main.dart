@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:learn_dart/firebase_options.dart';
 import 'package:learn_dart/screens/login_screen.dart';
 import 'package:learn_dart/screens/register_screen.dart';
+import 'package:learn_dart/screens/verify_email_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,16 +39,30 @@ class HomeScreen extends StatelessWidget {
           case ConnectionState.done:
             final FirebaseAuth auth = FirebaseAuth.instance;
             final User? user = auth.currentUser;
-
-            return const LoginScreen(title: 'Login');
-          //   if (user?.emailVerified ?? false) {
-          //     return const Text('Done');
-          //   } else {
-          //     return VerifyEmailScreen(auth: auth);
-          //   }
+            if (user != null) {
+              if (user.emailVerified) {
+                print('Email is verified');
+              } else {
+                return VerifyEmailScreen(auth: auth);
+              }
+            } else {
+              return const LoginScreen(title: 'Login');
+            }
+            //Screen that shows after successful login.
+            return Scaffold(
+              body: Center(
+                child: TextButton(
+                  onPressed: () async {
+                    await auth.signOut();
+                  },
+                  child: const Text('Log out'),
+                ),
+              ),
+            );
 
           default:
-            return const Center(child: Text('something went wrong'));
+            return const Scaffold(
+                body: Center(child: Text('something went wrong')));
         }
       },
     );
