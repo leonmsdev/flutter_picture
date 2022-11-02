@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "136101478522",
+    "project_id": "leonms-dev",
+    "storage_bucket": "leonms-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136101478522:android:1a7dbf5f6855b9e79c3bc3",
+        "android_client_info": {
+          "package_name": "com.example.learn_dart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "136101478522-e688oj6r7aqh7htaahj6ngt6fum2f1j1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZhvlwF1HtW_6zIKY3MKnsBrCp1I0gjXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "136101478522-e688oj6r7aqh7htaahj6ngt6fum2f1j1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "136101478522-fbffniotnpopt0qlqoalq4vi2sn90e3s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.learnDart"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
