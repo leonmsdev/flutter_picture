@@ -6,39 +6,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:learn_dart/firebase_options.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key, required this.title});
-
-  final String title;
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: const Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25),
-          child: RegisterForm(),
-        ),
-      ),
-    );
-  }
-}
-
-class RegisterForm extends StatefulWidget {
-  const RegisterForm({super.key});
-
-  @override
-  State<RegisterForm> createState() => _RegisterFormState();
-}
-
-class _RegisterFormState extends State<RegisterForm> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   final _formKey = GlobalKey<FormState>();
@@ -81,11 +55,12 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform),
-      builder: (context, snapshot) {
-        return Form(
+    return Scaffold(
+      appBar: AppBar(title: const Text('Register')),
+      body: Padding(
+        padding: const EdgeInsets.all(25),
+        child: Center(
+            child: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -193,11 +168,20 @@ class _RegisterFormState extends State<RegisterForm> {
                   }
                 },
                 child: const Text('Register'),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Already registred? Login here!'),
               )
             ],
           ),
-        );
-      },
+        )),
+      ),
     );
   }
 }
