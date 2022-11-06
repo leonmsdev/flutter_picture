@@ -1,9 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:learn_dart/firebase_options.dart';
+import 'dart:developer' as devtools show log;
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -55,6 +54,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
     return Scaffold(
       appBar: AppBar(title: const Text('Register')),
       body: Padding(
@@ -151,18 +152,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         email: email,
                         password: password,
                       );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
+                      try {
+                        await user?.sendEmailVerification();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Email verification has been send to $email.'),
+                          ),
+                        );
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'email-already-in-use') {
+                          final shouldLogout = showEmailResentDialog(context);
+                          if (await shouldLogout) {
+                            await user?.sendEmailVerification();
+                          }
+                        }
+                      }
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'email-already-in-use') {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                              content: Text(
-                                  'The account already exists for that email.')),
+                            content: Text(
+                                'The account already exists for that email.'),
+                          ),
                         );
+                        final shouldLogout = showEmailResentDialog(context);
+                        if (await shouldLogout) {
+                          await user?.sendEmailVerification();
+                        }
                       } else {
-                        print(e.code);
+                        devtools.log(e.code);
                       }
                     }
                   }
@@ -176,7 +195,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Already registred? Login here!'),
+                child: const Text('Already registred? Sign in here!'),
               )
             ],
           ),
@@ -276,4 +295,30 @@ class PasswordValidationItems extends StatelessWidget {
       ],
     );
   }
+}
+
+Future<bool> showEmailResentDialog(BuildContext context) {
+  return showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Send email verification'),
+        content: const Text('Please resend email verification'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: const Text('Close'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: const Text('Resent email verification'),
+          ),
+        ],
+      );
+    },
+  ).then((value) => value ?? false);
 }
