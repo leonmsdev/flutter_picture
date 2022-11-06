@@ -1,12 +1,10 @@
-// ignore_for_file: avoid_print
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_dart/firebase_options.dart';
-import 'package:learn_dart/screens/login_screen.dart';
+import 'package:learn_dart/screens/home_screen.dart';
+import 'package:learn_dart/screens/sign_in_screen.dart';
 import 'package:learn_dart/screens/register_screen.dart';
-import 'package:learn_dart/screens/verify_email_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,17 +15,18 @@ void main() {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: const MainScreen(),
       routes: {
-        '/login/': (context) => const LoginScreen(title: 'login Screen'),
+        '/sign_in/': (context) => const SignInScreen(),
         '/register/': (context) => const RegisterScreen(),
+        '/home/': (context) => const HomeScreen(),
       },
     ),
   );
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class MainScreen extends StatelessWidget {
+  const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,30 +38,25 @@ class HomeScreen extends StatelessWidget {
           case ConnectionState.done:
             final FirebaseAuth auth = FirebaseAuth.instance;
             final User? user = auth.currentUser;
+            /* TODO
+            overthink Sign In logic maybe validate 
+            email while create account and 
+            than later show dialog box in app 
+            if email is not validated */
             if (user != null) {
               if (user.emailVerified) {
-                print('Email is verified');
+                return const HomeScreen();
               } else {
-                return VerifyEmailScreen(auth: auth);
+                return const SignInScreen();
               }
             } else {
-              return const LoginScreen(title: 'Login');
+              return const SignInScreen();
             }
-            //Screen that shows after successful login.
-            return Scaffold(
-              body: Center(
-                child: TextButton(
-                  onPressed: () async {
-                    await auth.signOut();
-                  },
-                  child: const Text('Log out'),
-                ),
-              ),
-            );
 
           default:
             return const Scaffold(
-                body: Center(child: Text('something went wrong')));
+                body: SizedBox(
+                    height: 50, width: 50, child: CircularProgressIndicator()));
         }
       },
     );
