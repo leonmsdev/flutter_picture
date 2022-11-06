@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:learn_dart/constants/routes.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (await shouldLogout) {
                     await auth.signOut();
                     Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/sign_in/', (_) => false);
+                        .pushNamedAndRemoveUntil(signInRoute, (_) => false);
                   }
                   break;
               }
@@ -37,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return const [
                 PopupMenuItem<MenuAction>(
                   value: MenuAction.logout,
-                  child: Text('Log out'),
+                  child: Text('Sign out'),
                 )
               ];
             },
@@ -59,8 +60,8 @@ Future<bool> showLogOutDialog(BuildContext context) {
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: const Text('Log out'),
-        content: const Text('Are you sure you want to log out ?'),
+        title: const Text('Sign out'),
+        content: const Text('Are you sure you want to sign out ?'),
         actions: [
           TextButton(
             onPressed: () {
@@ -72,7 +73,7 @@ Future<bool> showLogOutDialog(BuildContext context) {
             onPressed: () {
               Navigator.of(context).pop(true);
             },
-            child: const Text('Log out'),
+            child: const Text('Sign out'),
           ),
         ],
       );

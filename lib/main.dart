@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:learn_dart/constants/routes.dart';
 import 'package:learn_dart/firebase_options.dart';
 import 'package:learn_dart/screens/home_screen.dart';
 import 'package:learn_dart/screens/sign_in_screen.dart';
@@ -17,9 +18,9 @@ void main() {
       ),
       home: const MainScreen(),
       routes: {
-        '/sign_in/': (context) => const SignInScreen(),
-        '/register/': (context) => const RegisterScreen(),
-        '/home/': (context) => const HomeScreen(),
+        signInRoute: (context) => const SignInScreen(),
+        registerRoute: (context) => const RegisterScreen(),
+        homeRoute: (context) => const HomeScreen(),
       },
     ),
   );
@@ -56,7 +57,10 @@ class MainScreen extends StatelessWidget {
           default:
             return const Scaffold(
                 body: SizedBox(
-                    height: 50, width: 50, child: CircularProgressIndicator()));
+              height: 50,
+              width: 50,
+              child: CircularProgressIndicator(),
+            ));
         }
       },
     );

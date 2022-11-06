@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:learn_dart/constants/routes.dart';
 import 'package:learn_dart/screens/register_screen.dart';
 import 'package:learn_dart/widgets/input_text_field.dart';
 import 'package:learn_dart/widgets/obscure_input_text_field.dart';
@@ -84,7 +85,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 )),
                           );
                           Navigator.of(context)
-                              .pushNamedAndRemoveUntil('/home/', (_) => false);
+                              .pushNamedAndRemoveUntil(homeRoute, (_) => false);
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'user-not-found') {
                             ScaffoldMessenger.of(context).showSnackBar(
