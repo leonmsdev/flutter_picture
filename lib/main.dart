@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_dart/constants/routes.dart';
-import 'package:learn_dart/firebase_options.dart';
+import 'package:learn_dart/services/firebase_options.dart';
 import 'package:learn_dart/screens/home_screen.dart';
 import 'package:learn_dart/screens/sign_in_screen.dart';
 import 'package:learn_dart/screens/register_screen.dart';
