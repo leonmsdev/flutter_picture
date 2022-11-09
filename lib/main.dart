@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_dart/constants/routes.dart';
-import 'package:learn_dart/services/firebase_options.dart';
+import 'package:learn_dart/screens/verify_screen.dart';
+import 'package:learn_dart/services/auth/auth_service.dart';
+import 'firebase_options.dart';
 import 'package:learn_dart/screens/home_screen.dart';
 import 'package:learn_dart/screens/sign_in_screen.dart';
 import 'package:learn_dart/screens/register_screen.dart';
@@ -21,6 +21,7 @@ void main() {
         signInRoute: (context) => const SignInScreen(),
         registerRoute: (context) => const RegisterScreen(),
         homeRoute: (context) => const HomeScreen(),
+        verifyRoute: (context) => const VerifyScreen(),
       },
     ),
   );
@@ -32,23 +33,21 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform),
+      future: AuthService.firebase().initialize(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
-            final FirebaseAuth auth = FirebaseAuth.instance;
-            final User? user = auth.currentUser;
+            final user = AuthService.firebase().currentUser;
             /* TODO
             overthink Sign In logic maybe validate 
             email while create account and 
             than later show dialog box in app 
             if email is not validated */
             if (user != null) {
-              if (user.emailVerified) {
+              if (user.isEmailVerified) {
                 return const HomeScreen();
               } else {
-                return const SignInScreen();
+                return const VerifyScreen();
               }
             } else {
               return const SignInScreen();
