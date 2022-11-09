@@ -1,8 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:learn_dart/constants/routes.dart';
+import 'package:learn_dart/services/auth/auth_exceptions.dart';
 import 'dart:developer' as devtools show log;
+
+import 'package:learn_dart/services/auth/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -54,8 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
+    AuthService.firebase().initialize();
     return Scaffold(
       appBar: AppBar(title: const Text('Register')),
       body: Padding(
@@ -147,42 +149,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     final password = _password.text;
 
                     try {
-                      await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
+                      await AuthService.firebase().createUser(
                         email: email,
                         password: password,
                       );
+
                       try {
-                        await user?.sendEmailVerification();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                'Email verification has been send to $email.'),
-                          ),
-                        );
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'email-already-in-use') {
-                          final shouldLogout = showEmailResentDialog(context);
-                          if (await shouldLogout) {
-                            await user?.sendEmailVerification();
-                          }
-                        }
+                        await AuthService.firebase().sendEmailVerification();
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            verifyRoute, (route) => false);
+                      } on EmailAlreadyInUseAuthException {
+                        devtools.log('Email already in use');
                       }
-                    } on FirebaseAuthException catch (e) {
-                      if (e.code == 'email-already-in-use') {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                'The account already exists for that email.'),
-                          ),
-                        );
-                        final shouldLogout = showEmailResentDialog(context);
-                        if (await shouldLogout) {
-                          await user?.sendEmailVerification();
-                        }
-                      } else {
-                        devtools.log(e.code);
-                      }
+                    } on EmailAlreadyInUseAuthException {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'The account already exists for that email.'),
+                        ),
+                      );
+                    } on InvalidEmailAuthException {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Your email is not valid.'),
+                        ),
+                      );
+                    } on GenericAuthException {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Failed to register try again later.'),
+                        ),
+                      );
                     }
                   }
                 },
