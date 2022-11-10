@@ -4,6 +4,7 @@ import 'package:learn_dart/constants/routes.dart';
 import 'package:learn_dart/screens/register_screen.dart';
 import 'package:learn_dart/services/auth/auth_exceptions.dart';
 import 'package:learn_dart/services/auth/auth_service.dart';
+import 'package:learn_dart/widgets/filled_button.dart';
 import 'package:learn_dart/widgets/input_text_field.dart';
 import 'package:learn_dart/widgets/obscure_input_text_field.dart';
 
@@ -39,6 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sign In'),
+        backgroundColor: Colors.black87,
       ),
       body: Container(
         color: Colors.white,
@@ -59,82 +61,84 @@ class _SignInScreenState extends State<SignInScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  TextButton(
-                    onPressed: () async {
-                      //show data if form is valid
-                      if (_formKey.currentState!.validate()) {
-                        final email = _email.text;
-                        final password = _password.text;
+                  FilledButton(
+                      lable: 'Sign in',
+                      onTap: () async {
+                        //show data if form is valid
+                        if (_formKey.currentState!.validate()) {
+                          final email = _email.text;
+                          final password = _password.text;
 
-                        try {
-                          await AuthService.firebase().signIn(
-                            email: email,
-                            password: password,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: Colors.greenAccent.shade400,
-                              content: const SizedBox(
-                                height: 18,
-                                child: Center(
-                                  child: Text(
-                                    'Logged in',
+                          try {
+                            await AuthService.firebase().signIn(
+                              email: email,
+                              password: password,
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: Colors.greenAccent.shade400,
+                                content: const SizedBox(
+                                  height: 18,
+                                  child: Center(
+                                    child: Text(
+                                      'Logged in',
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                          Navigator.of(context)
-                              .pushNamedAndRemoveUntil(homeRoute, (_) => false);
-                        } on UserNotFoundAuthException {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            );
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                homeRoute, (_) => false);
+                          } on UserNotFoundAuthException {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  backgroundColor: Colors.red,
+                                  content: SizedBox(
+                                    height: 18,
+                                    child: Center(
+                                        child: Text(
+                                            'Your email is not registered!')),
+                                  )),
+                            );
+                          } on WrongPasswordAuthException {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.red,
+                                content: SizedBox(
+                                  height: 18,
+                                  child: Center(child: Text('Wrong password.')),
+                                ),
+                              ),
+                            );
+                          } on GenericAuthException {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
                                 backgroundColor: Colors.red,
                                 content: SizedBox(
                                   height: 18,
                                   child: Center(
+                                      child:
+                                          Text('Auth Error try again later.')),
+                                ),
+                              ),
+                            );
+                          } on ToManyRequestsAuthException {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.orangeAccent,
+                                content: SizedBox(
+                                  height: 18,
+                                  child: Center(
                                       child: Text(
-                                          'Your email is not registered!')),
-                                )),
-                          );
-                        } on WrongPasswordAuthException {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              backgroundColor: Colors.red,
-                              content: SizedBox(
-                                height: 18,
-                                child: Center(child: Text('Wrong password.')),
+                                          'To many request, please try again later.')),
+                                ),
                               ),
-                            ),
-                          );
-                        } on GenericAuthException {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              backgroundColor: Colors.red,
-                              content: SizedBox(
-                                height: 18,
-                                child: Center(
-                                    child: Text('Auth Error try again later.')),
-                              ),
-                            ),
-                          );
-                        } on ToManyRequestsAuthException {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              backgroundColor: Colors.orangeAccent,
-                              content: SizedBox(
-                                height: 18,
-                                child: Center(
-                                    child: Text(
-                                        'To many request, please try again later.')),
-                              ),
-                            ),
-                          );
+                            );
+                          }
                         }
-                      }
-                    },
-                    child: const Text('Sign In'),
-                  ),
+                      },
+                      width: 100,
+                      height: 40),
                   const SizedBox(
                     height: 50,
                   ),
