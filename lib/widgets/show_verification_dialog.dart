@@ -50,6 +50,8 @@ Future showLVerificationDialog(BuildContext context) {
                     Navigator.of(context).pop();
                   } else {
                     devtools.log("Is not verified");
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
                   }
                 } on GenericAuthException {
                   ScaffoldMessenger.of(context).showSnackBar(

@@ -115,7 +115,7 @@ class FirebaseAuthProvider implements AuthProvider {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      devtools.log(e.code);
+      throw GenericAuthException();
     }
   }
 }

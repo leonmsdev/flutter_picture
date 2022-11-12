@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_dart/services/auth/auth_exceptions.dart';
 import 'package:learn_dart/widgets/filled_button.dart';
 import 'package:learn_dart/widgets/input_text_field.dart';
 
@@ -65,8 +66,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             lable: 'Reset password',
             onTap: () async {
               final email = _email.text;
-              AuthService.firebase().resetPassword(email: email);
-              Navigator.of(context).pop();
+
+              try {
+                AuthService.firebase().resetPassword(email: email);
+                Navigator.of(context).pop();
+              } on GenericAuthException {
+                print("Generic Error");
+              }
             },
             width: 200,
             height: 40,
