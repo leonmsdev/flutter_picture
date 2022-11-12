@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:learn_dart/constants/routes.dart';
 import 'package:learn_dart/services/auth/auth_service.dart';
-import 'package:learn_dart/services/auth/auth_user.dart';
 import 'package:learn_dart/widgets/border_button.dart';
 import 'package:learn_dart/widgets/filled_button.dart';
+import 'package:lottie/lottie.dart';
 
 class VerifyScreen extends StatelessWidget {
   const VerifyScreen({super.key});
@@ -13,14 +11,20 @@ class VerifyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Verify email'),
       ),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(height: 100),
+            Lottie.network(
+                'https://assets9.lottiefiles.com/packages/lf20_9n1h4nww.json',
+                width: 150,
+                repeat: false),
+            const SizedBox(height: 40),
             const Text('Check you email'),
             const SizedBox(
               height: 5,

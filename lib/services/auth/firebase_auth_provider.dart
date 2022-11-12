@@ -109,4 +109,13 @@ class FirebaseAuthProvider implements AuthProvider {
 
   @override
   String? get email => FirebaseAuth.instance.currentUser?.email;
+
+  @override
+  Future resetPassword({required String email}) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      devtools.log(e.code);
+    }
+  }
 }
