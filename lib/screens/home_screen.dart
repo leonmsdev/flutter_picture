@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 15,
+                height: 25,
               ),
               Text(
                 formattedDate,

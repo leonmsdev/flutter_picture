@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:learn_dart/constants/routes.dart';
 import 'package:learn_dart/screens/verify_screen.dart';
 import 'package:learn_dart/services/auth/auth_service.dart';
-import 'firebase_options.dart';
 import 'package:learn_dart/screens/home_screen.dart';
 import 'package:learn_dart/screens/sign_in_screen.dart';
 import 'package:learn_dart/screens/register_screen.dart';
+import 'package:learn_dart/style/theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,9 +13,7 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: appThemeData(),
       home: const MainScreen(),
       routes: {
         signInRoute: (context) => const SignInScreen(),
@@ -38,16 +36,11 @@ class MainScreen extends StatelessWidget {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
             final user = AuthService.firebase().currentUser;
-            /* TODO
-            overthink Sign In logic maybe validate 
-            email while create account and 
-            than later show dialog box in app 
-            if email is not validated */
             if (user != null) {
               if (user.isEmailVerified) {
                 return const HomeScreen();
               } else {
-                return const VerifyScreen();
+                return const SignInScreen();
               }
             } else {
               return const SignInScreen();

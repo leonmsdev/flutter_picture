@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_dart/style/theme.dart';
 
 class FilledButton extends StatelessWidget {
   const FilledButton(
@@ -21,7 +22,7 @@ class FilledButton extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: appThemeData().primaryColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(

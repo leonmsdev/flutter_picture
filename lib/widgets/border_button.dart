@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_dart/style/theme.dart';
 
 class BorderButton extends StatelessWidget {
   const BorderButton(
@@ -22,7 +23,7 @@ class BorderButton extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 1, color: Colors.black)),
+            border: Border.all(width: 1, color: appThemeData().primaryColor)),
         child: Center(
             child: Text(
           lable,
