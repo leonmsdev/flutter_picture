@@ -1,4 +1,4 @@
-//Const that define sqflite columns
+//Const for local sqflite database
 const dbName = 'notes.db';
 const noteTable = 'note';
 const userTable = 'user';
